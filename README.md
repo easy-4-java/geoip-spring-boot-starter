@@ -17,7 +17,7 @@ https://github.com/maxmind/GeoIP2-java
 
 ``` xml
 <dependency>
-	<groupId>com.github.hiwepy</groupId>
+	<groupId>io.github.easy4j</groupId>
 	<artifactId>geoip-spring-boot-starter</artifactId>
 	<version>1.0.0.RELEASE</version>
 </dependency>
