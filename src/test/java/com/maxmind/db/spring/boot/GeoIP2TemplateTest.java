@@ -161,9 +161,7 @@ class GeoIP2TemplateTest {
 
     @Test
     void getRegionAddressShouldReturnNotMatchOnException() throws Exception {
-        // databaseReader.city() will throw since it's not stubbed for this IP
-        when(databaseReader.city(any(InetAddress.class))).thenThrow(new IOException("error"));
-
+        // Invalid input is rejected before the database reader is called.
         RegionAddress address = template.getRegionAddress("invalid");
         assertThat(address).isNotNull();
         assertThat(address.getCountry()).isEqualTo("未分配或者内网IP");

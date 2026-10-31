@@ -15,36 +15,26 @@
  */
 package com.maxmind.db.spring.boot;
 
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.model.IspResponse;
+import org.junit.Test;
+
 import java.io.File;
 import java.net.InetAddress;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import com.maxmind.geoip2.DatabaseReader;
-import com.maxmind.geoip2.model.IspResponse;
-
+/** Exercises a lookup against MaxMind's pinned synthetic test database. */
 public class GeoIP2ISP_Test {
 
-	@Test
-	public void testName() throws Exception {
-
-		// A File object pointing to your GeoIP2 ISP database
-		File database = new File("/path/to/GeoIP2-ISP.mmdb");
-
-		// This creates the DatabaseReader object. To improve performance, reuse
-		// the object across lookups. The object is thread-safe.
-		DatabaseReader reader = new DatabaseReader.Builder(database).build();
-
-		InetAddress ipAddress = InetAddress.getByName("128.101.101.101");
-
-		IspResponse response = reader.isp(ipAddress);
-
-		System.out.println(response.getAutonomousSystemNumber());       // 217
-		System.out.println(response.getAutonomousSystemOrganization()); // 'University of Minnesota'
-		System.out.println(response.getIsp());                          // 'University of Minnesota'
-		System.out.println(response.getOrganization());                 // 'University of Minnesota'
-
-	}
-
-
+    @Test
+    public void testName() throws Exception {
+        File database = new File("target/geoip-test-data/GeoIP2-ISP-Test.mmdb");
+        try (DatabaseReader reader = new DatabaseReader.Builder(database).build()) {
+            InetAddress ip = InetAddress.getByName("1.128.0.0");
+            IspResponse response = reader.isp(ip);
+            assertEquals("Telstra Internet", response.getIsp());
+        }
+    }
 }

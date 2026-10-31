@@ -457,6 +457,32 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <!-- MaxMind's public synthetic MMDB fixtures, pinned to one upstream commit. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven-antrun-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>fetch-maxmind-test-data</id>
+                        <phase>generate-test-resources</phase>
+                        <goals><goal>run</goal></goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${project.build.directory}/geoip-test-data"/>
+                                <get src="https://raw.githubusercontent.com/maxmind/MaxMind-DB/d1551916cff0712d12ff602c309234471b0402a2/test-data/GeoLite2-ASN-Test.mmdb" dest="${project.build.directory}/geoip-test-data/GeoLite2-ASN-Test.mmdb" skipexisting="true"/>
+                                <get src="https://raw.githubusercontent.com/maxmind/MaxMind-DB/d1551916cff0712d12ff602c309234471b0402a2/test-data/GeoIP2-Anonymous-IP-Test.mmdb" dest="${project.build.directory}/geoip-test-data/GeoIP2-Anonymous-IP-Test.mmdb" skipexisting="true"/>
+                                <get src="https://raw.githubusercontent.com/maxmind/MaxMind-DB/d1551916cff0712d12ff602c309234471b0402a2/test-data/GeoIP2-City-Test.mmdb" dest="${project.build.directory}/geoip-test-data/GeoIP2-City-Test.mmdb" skipexisting="true"/>
+                                <get src="https://raw.githubusercontent.com/maxmind/MaxMind-DB/d1551916cff0712d12ff602c309234471b0402a2/test-data/GeoIP2-Connection-Type-Test.mmdb" dest="${project.build.directory}/geoip-test-data/GeoIP2-Connection-Type-Test.mmdb" skipexisting="true"/>
+                                <get src="https://raw.githubusercontent.com/maxmind/MaxMind-DB/d1551916cff0712d12ff602c309234471b0402a2/test-data/GeoIP2-Country-Test.mmdb" dest="${project.build.directory}/geoip-test-data/GeoIP2-Country-Test.mmdb" skipexisting="true"/>
+                                <get src="https://raw.githubusercontent.com/maxmind/MaxMind-DB/d1551916cff0712d12ff602c309234471b0402a2/test-data/GeoIP2-Domain-Test.mmdb" dest="${project.build.directory}/geoip-test-data/GeoIP2-Domain-Test.mmdb" skipexisting="true"/>
+                                <get src="https://raw.githubusercontent.com/maxmind/MaxMind-DB/d1551916cff0712d12ff602c309234471b0402a2/test-data/GeoIP2-Enterprise-Test.mmdb" dest="${project.build.directory}/geoip-test-data/GeoIP2-Enterprise-Test.mmdb" skipexisting="true"/>
+                                <get src="https://raw.githubusercontent.com/maxmind/MaxMind-DB/d1551916cff0712d12ff602c309234471b0402a2/test-data/GeoIP2-ISP-Test.mmdb" dest="${project.build.directory}/geoip-test-data/GeoIP2-ISP-Test.mmdb" skipexisting="true"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>

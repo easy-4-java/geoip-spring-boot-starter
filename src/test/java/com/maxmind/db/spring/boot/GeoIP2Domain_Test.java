@@ -15,39 +15,26 @@
  */
 package com.maxmind.db.spring.boot;
 
-import java.io.File;
-import java.net.InetAddress;
-
+import com.maxmind.geoip2.DatabaseReader;
 import com.maxmind.geoip2.model.DomainResponse;
 import org.junit.Test;
 
-import com.maxmind.geoip2.DatabaseReader;
-import com.maxmind.geoip2.model.EnterpriseResponse;
-import com.maxmind.geoip2.record.City;
-import com.maxmind.geoip2.record.Country;
-import com.maxmind.geoip2.record.Location;
-import com.maxmind.geoip2.record.Postal;
-import com.maxmind.geoip2.record.Subdivision;
+import java.io.File;
+import java.net.InetAddress;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+/** Exercises a lookup against MaxMind's pinned synthetic test database. */
 public class GeoIP2Domain_Test {
 
-	@Test
-	public void testName() throws Exception {
-
-		// A File object pointing to your GeoIP2 Domain database
-		File database = new File("/path/to/GeoIP2-Domain.mmdb");
-
-		// This creates the DatabaseReader object. To improve performance, reuse
-		// the object across lookups. The object is thread-safe.
-		DatabaseReader reader = new DatabaseReader.Builder(database).build();
-
-		InetAddress ipAddress = InetAddress.getByName("128.101.101.101");
-
-		DomainResponse response = reader.domain(ipAddress);
-
-		System.out.println(response.getDomain()); // 'Corporate'
-
-	}
-
-
+    @Test
+    public void testName() throws Exception {
+        File database = new File("target/geoip-test-data/GeoIP2-Domain-Test.mmdb");
+        try (DatabaseReader reader = new DatabaseReader.Builder(database).build()) {
+            InetAddress ip = InetAddress.getByName("1.2.0.0");
+            DomainResponse response = reader.domain(ip);
+            assertEquals("maxmind.com", response.getDomain());
+        }
+    }
 }
