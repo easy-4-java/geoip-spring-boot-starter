@@ -1,73 +1,25 @@
-/*
- * Copyright (c) 2018, hiwepy (https://github.com/hiwepy).
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.maxmind.db.spring.boot;
+
+import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.model.CityResponse;
+import org.junit.Test;
 
 import java.io.File;
 import java.net.InetAddress;
 
-import com.maxmind.geoip2.model.CityResponse;
-import com.maxmind.geoip2.record.*;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import com.maxmind.geoip2.DatabaseReader;
-import com.maxmind.geoip2.model.AnonymousIpResponse;
-import com.maxmind.geoip2.model.ConnectionTypeResponse;
-import com.maxmind.geoip2.model.ConnectionTypeResponse.ConnectionType;
-
-/**
- * https://github.com/maxmind/GeoIP2-java
- */
+/** Exercises a lookup against MaxMind's pinned synthetic test database. */
 public class GeoIP2City_Test {
 
-	@Test
-	public void testName() throws Exception {
-
-		// A File object pointing to your GeoIP2 or GeoLite2 database
-		File database = new File("D:\\geoip\\GeoLite2-City.mmdb");
-
-		// This creates the DatabaseReader object. To improve performance, reuse
-		// the object across lookups. The object is thread-safe.
-		DatabaseReader reader = new DatabaseReader.Builder(database).build();
-
-		InetAddress ipAddress = InetAddress.getByName("128.101.101.101");
-
-		// Replace "city" with the appropriate method for your database, e.g.,
-		// "country".
-		CityResponse response = reader.city(ipAddress);
-
-		Country country = response.getCountry();
-		System.out.println(country.getIsoCode());            // 'US'
-		System.out.println(country.getName());               // 'United States'
-		System.out.println(country.getNames().get("zh-CN")); // '美国'
-
-		Subdivision subdivision = response.getMostSpecificSubdivision();
-		System.out.println(subdivision.getName());    // 'Minnesota'
-		System.out.println(subdivision.getIsoCode()); // 'MN'
-
-		City city = response.getCity();
-		System.out.println(city.getName()); // 'Minneapolis'
-
-		Postal postal = response.getPostal();
-		System.out.println(postal.getCode()); // '55447'
-
-		Location location = response.getLocation();
-		System.out.println(location.getLatitude());  // 45.0027
-		System.out.println(location.getLongitude()); // -93.4881
-
-	}
-
-
+    @Test
+    public void testName() throws Exception {
+        File database = new File("target/geoip-test-data/GeoIP2-City-Test.mmdb");
+        try (DatabaseReader reader = new DatabaseReader.Builder(database).build()) {
+            InetAddress ip = InetAddress.getByName("81.2.69.160");
+            CityResponse response = reader.city(ip);
+            assertEquals("London", response.getCity().getName());
+        }
+    }
 }
