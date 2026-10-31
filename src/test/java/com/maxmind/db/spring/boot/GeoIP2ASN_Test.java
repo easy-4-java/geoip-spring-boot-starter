@@ -19,7 +19,7 @@ public class GeoIP2ASN_Test {
         try (DatabaseReader reader = new DatabaseReader.Builder(database).build()) {
             InetAddress ip = InetAddress.getByName("1.128.0.0");
             AsnResponse response = reader.asn(ip);
-            assertEquals(Integer.valueOf(1221), response.getAutonomousSystemNumber());
+            assertEquals(Long.valueOf(1221L), response.getAutonomousSystemNumber());
         }
     }
 }
